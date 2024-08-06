@@ -1,13 +1,13 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter/material.dart';
 import 'package:otakudev/app/theme/app_theme.dart';
-import 'package:otakudev/app/widgets/menu_builder.dart';
 import '../controllers/watch_anime_controller.dart';
 import 'package:otakudev/app/core/providers/api.dart';
+import 'package:otakudev/app/widgets/menu_builder.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:otakudev/app/modules/watch_anime/service/watch_anime_service.dart';
 
 class WatchAnimeView extends GetView<WatchAnimeController> {
@@ -43,78 +43,95 @@ class WatchAnimeView extends GetView<WatchAnimeController> {
                 tooltip: "Back",
               ),
             ),
-          ),
-          body: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.all(16.sp),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  controller.isLoading
-                      ? Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Lottie.asset(
-                                "assets/lotties/loading.json",
-                                width: 200.w,
-                                height: 200.h,
-                              ),
-                              const Text(
-                                "Memuat anime...",
-                                maxLines: 2,
-                                textAlign: TextAlign.center,
-                              )
-                            ],
-                          ),
-                        )
-                      : Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                "Streaming",
-                                style: TextStyle(
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                              const Divider(
-                                indent: 2,
-                                color: primaryColor,
-                              ),
-                              HtmlWidget(controller.iframeUrl),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              Text(
-                                "Download",
-                                style: TextStyle(
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                              const Divider(
-                                indent: 2,
-                                color: primaryColor,
-                              ),
-                              Expanded(
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: controller.downloadModel.length,
-                                  padding: EdgeInsets.symmetric(vertical: 10.w),
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return Menu.downloadList(
-                                        controller.downloadModel[index]);
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(50),
+              child: TabBar(
+                controller: controller.tabController,
+                labelColor: lightColor,
+                unselectedLabelColor: shadowColor,
+                dividerColor: transparent,
+                indicatorColor: transparent,
+                tabs: const [
+                  Tab(text: 'Streaming'),
+                  Tab(text: 'Download'),
                 ],
               ),
+            ),
+          ),
+          body: SafeArea(
+            child: TabBarView(
+              controller: controller.tabController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(16.sp),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      controller.isLoading
+                          ? Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Lottie.asset(
+                                    "assets/lotties/loading.json",
+                                    width: 200.w,
+                                    height: 200.h,
+                                  ),
+                                  const Text(
+                                    "Memuat anime...",
+                                    maxLines: 2,
+                                    textAlign: TextAlign.center,
+                                  )
+                                ],
+                              ),
+                            )
+                          : Expanded(
+                              child: HtmlWidget(
+                                controller.iframeUrl,
+                              ),
+                            )
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(16.sp),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      controller.isLoading
+                          ? Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Lottie.asset(
+                                    "assets/lotties/loading.json",
+                                    width: 200.w,
+                                    height: 200.h,
+                                  ),
+                                  const Text(
+                                    "Memuat anime...",
+                                    maxLines: 2,
+                                    textAlign: TextAlign.center,
+                                  )
+                                ],
+                              ),
+                            )
+                          : Expanded(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: controller.downloadModel.length,
+                                padding: EdgeInsets.symmetric(vertical: 10.w),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Menu.downloadList(
+                                      controller.downloadModel[index]);
+                                },
+                              ),
+                            ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         );

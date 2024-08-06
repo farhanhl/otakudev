@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:html/dom.dart';
+import 'package:flutter/material.dart';
 import 'package:html/parser.dart' as parser;
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:otakudev/app/data/dtos/anime_list_model.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:otakudev/app/modules/dashboard/service/dashboard_service.dart';
 
 class DashboardController extends GetxController {
