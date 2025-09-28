@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-const baseUrl = 'https://otakudesu.cloud/';
+const baseUrl = 'https://otakudesu.best/';
 
 class Api {
   final Dio dio = Dio(
